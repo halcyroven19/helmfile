@@ -1,0 +1,45 @@
+version: 2
+project_name: helmfile
+builds:
+  - id: helmfile
+    main: .
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+      - -X go.szostok.io/version.version={{.Version}}
+      - -X go.szostok.io/version.buildDate={{.Date}}
+      - -X go.szostok.io/version.commit={{.FullCommit}}
+      - -X go.szostok.io/version.commitDate={{.CommitDate}}
+      - -X go.szostok.io/version.dirtyBuild=false
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+      - "386"
+archives:
+  - id: helmfile
+    ids:
+      - helmfile
+    builds_info:
+      group: root
+      owner: root
+      mode: 0644
+changelog:
+  use: github
+  sort: asc
+  groups:
+    - title: Features
+      regexp: '^.*[Ff]eat[(\\w)]*:+.*$'
+      order: 0
+    - title: "Fixes"
+      regexp: '^.*fix[(\\w)]*.*$'
+      order: 1
+    - title: "Dependencies"
+      regexp: '^.*(deps|bump)[(\\w)]*.*$'
+      order: 2
+    - title: Others
+      order: 999
